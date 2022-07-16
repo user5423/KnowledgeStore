@@ -8,7 +8,7 @@ centralize
 Systems
 
 - [Linux Admin](linux-admin/home.md)
-- Linux OS
+- [Linux OS](linux-system/home.md)
 
 Networking
 
