@@ -1,6 +1,6 @@
 ## Section 2: Process Management
 
-### What is a process?
+### What is a process
 
 A process is the set of resources used by an executing program. This includes resources such as:
 
@@ -85,10 +85,14 @@ In order to get the process descriptor about the currently executing task, the k
 - other architectures don't do this so need to calculate the memory address of the process descriptor every time the macro `current` is used
 
 In x86 architecture, the `current` macro needs to calculate the memory address of the process descriptor:
-1. It starts by calculated the address of the `struct thread_info` that is stored in the currently used stack. This is performed in assembly by the `current_thread_info()` method.
+1. It starts by calculated the address of the `struct thread_info` that is stored in the currently used stack. The assembly that the `current_thread_info()` method is shown here:
   - `movl $-8192, $eax` - it stores the negative of the size of the stack. In this case the size of the stack is 8192 bytes
   - `andl $esp, $eax` - It then masks out the least significant bits by anding the stacking pointer (stored in `$esp`), with the size of the kernel stack (stored in `$eax`)
   - This returns a pointer to the `struct thread_info` structure. The reason why we use a negative value here is because in x86, the stack grows downwards
-2. The `struct thread_info` stores a pointer to its corresponding `struct task_struct`, and dereferences that to get the data stored in that struct
+2. The `struct thread_info` stores a pointer to its corresponding `struct task_struct`. The `current` macro then dereferences the `task` member of the `struct thread_info`:
+  - `current_thread_info()->task;`
 
 In other architectrures such as PowerPC (IBM's RISC-based microprocessor), the current `task_struct` address is stored in the register `r2` meaning that the macro `current` just reads from this. The reason this can be done in PowerPC is because it has plenty of registers, and its kernel develoeprs deemed the address to the current `task_struct` worthy of a process register
+
+### Process State
+
