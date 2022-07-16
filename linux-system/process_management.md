@@ -48,3 +48,23 @@ In the first section, we defined what a process was - It is a set of resources t
 **Hint**: Take a look at the `<linux/sched.h>` file to look at what other information is stored in the `struct task_struct`.
 
 ![The task list and process descriptor](assets/task_list.png)
+
+
+### Allocating the process descriptor
+
+Each userspace thread has two stacks:
+- User Stack - this is used to store stack frames that correspond to instructions that are executed in userspace. This is stored in the user address space
+- Kernel Stack - When the thread makes a syscall to execute a privileged action in kernelspace, this stack is used. This is stored in the kernel address space
+
+The `task_struct` structure is allocated by the `slab allocator`, which is a memory management mechanism for efficient allocation of objects.
+
+In > Linux 2.7, a `struct thread_info` structure is allocated at the end of the kernel stack which holds information about the thread including a pointer to the corresponding `task_struct` that can contain multiple threads (and therefore multiple `struct thread_info`)
+
+In < Linux 2.7, this wasn't the case, and the `struct thread_info` structure did not exist
+
+![The thread_info structure](assets/thread_info.png)
+
+
+![The process kernel stack](assets/process_kernel_stack.png)
+
+
