@@ -13,6 +13,8 @@ Systems
 Networking
 
 - [Network Theory](network-theory/home.md)
+- [Network Programming](network-programming/home.md)
+- [Network Practicals](network-practical/home.md)
 
 Security
 
