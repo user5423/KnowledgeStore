@@ -104,7 +104,17 @@ A process descriptor (`task_struct`) has a field called `state` which defines th
 - `__TASK_STOPPED` - The task is no longer runnable. Its execution has stopped and it is not eligible to run any more. This occurs after a task receives the signals `SIGSTOP`, `SIGTSTP`, `SIGTTIN`, `SIGTTOU` or if it receives *any* signal while it is being debugged
 
 
-
 The set of process states can be modelled by a FSM, which can be seen in the diagram below:
 
 ![Process State FSM](assets/process_state_fsm.png)
+
+### Manipulating the current process state
+
+The Kernel will often need to change the state of processes using the macro `set_task_state(task, state)` defined in `<linux/sched.h>`.
+
+On SMP systems, it also provides a memory barrier to enforce ordering of process execution on other processors. Memory barriers are also used to enforce consistency to avoid unexpected behavior from out-of-order execution. Here are some more resources on memory barriers and memory ordering:
+- https://preshing.com/20120710/memory-barriers-are-like-source-control-operations/
+- https://preshing.com/20120625/memory-ordering-at-compile-time/
+- https://preshing.com/20120930/weak-vs-strong-memory-models/
+
+The method `set_task_state(task, state)` is equivalent to `set_current_state(state)`. If you'd like to see more of these macros and functions, view the `<linux/sched.h>` header file.
