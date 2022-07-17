@@ -118,3 +118,16 @@ On SMP systems, it also provides a memory barrier to enforce ordering of process
 - https://preshing.com/20120930/weak-vs-strong-memory-models/
 
 The method `set_task_state(task, state)` is equivalent to `set_current_state(state)`. If you'd like to see more of these macros and functions, view the `<linux/sched.h>` header file.
+
+
+### Process Context
+
+One of the most important parts of a process is the executing program code.The corresponding executable is read from secondary storage and loaded into the process's address space. 
+
+Processes typically execute in `user-space`. However when a process requires to execute an action that can only be performed in `kernel-space`, the process then the kernel executes in `kernel-space`. The kernel is said to be in **process context** when it is executing intructions on behalf of the user-space process.
+
+Once the process exits the kernel, the process can either resume in `user-space`, or if there is a higher priority process that is runable, then that process is executed. **NOTE**: The `current` macro is only usable in `kernel-space`.
+
+The kernel has several well defined interfaces including system calls and exception handlers. A process can only be executed in `kernel-space` if it uses a kernel interface.
+
+
