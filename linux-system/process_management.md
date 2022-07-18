@@ -127,12 +127,12 @@ One of the most important parts of a process is the executing program code.The c
 Processes typically execute in `user-space`. However when a process requires to execute an action that can only be performed in `kernel-space`, the process then the kernel executes in `kernel-space`. The kernel is said to be in **process context** when it is executing intructions on behalf of the user-space process.
 
 Once the process exits the kernel, the process can either resume in `user-space`, or if there is a higher priority process that is runable, then that process is executed. **NOTE**: The `current` macro is only usable in `kernel-space`.
-
+S
 The kernel has several well defined interfaces including system calls and exception handlers. A process can only be executed in `kernel-space` if it uses a kernel interface.
 
 ### Process Family Tree
 
-In Unix systems, there is a hierarchical structure that all processes adhere to, and linux is no different. When the linux system boots up, the first process that is executed is the `init` process (which has PID 1).
+In Unix systems, there is a hierarchical structure that all processes adhere to, and linux is nOo different. When the linux system boots up, the first process that is executed is the `init` process (which has PID 1).
 
 The `init` process is the parent of all Linux processes. If you take a look back at the task descriptors (`struct task_struct`), it has a member called ppid (parent PID). Every task has a parent, and the set of tasks on a systemcan be visualized as a tree (where tasks can have siblings, parents, and children). At the root of the tree is the `init` process, which is the only task to not have a parent process.
 
@@ -143,3 +143,37 @@ The `init` process's job is to initialize the system by triggering additional pr
 The `init` tasks' process descriptor is statically allocated as `init_task`. This makes sense as the `init` process lives until the OS shuts down. Between bootup and shutdown, the `init` process cannot be killed (and can only be requested to be at shutdown - It is up to the `init` process to shut itself down at this point).
 
 **Hint**: Take a look at Page 30 on "Linux Kernel Development by Robert Love" to see code examples regarding the traversal of processes
+
+### Process Creation
+
+Most Operating systems tend to implement a *spawn* mechanism that
+1. Creates a new process in a new memory address space
+2. Reads in an executable and begins execution
+
+However, Unix differs in that it performs these two operations as **separate distinct** system calls:
+1. `fork()` - it creates a copy of the current task where the only difference is the PID, PPID, memory address space, pending signals and I/O, and certain resources and statistics
+2. `exec()` - Reads the executable from storage and loads it into the address space and beings executing it
+**NOTE**: There are numerous variants of each of these that are described later
+
+The combination of performing `fork` followed by `exec` is similar to a single function that most other OSs provide. 
+
+#### Copy On Write
+
+Historically, when `fork()` was executed, all resources owned by the parent were duplicated and the copies were given to the child. However, this is pretty **inefficient** for two reasons
+1. There will likely be duplicated resources that could otherwise be shared
+2. In the scenario where we want to perform `exec` to load a **different** executable, then the Kernel wouldn't have wasted CPU on duplicating resources for a child task that will **not** be used by the child, and will have to be overwritten again.
+
+Nowadays, `fork()`'s implementation uses **Copy-On-Write** in order to reduce wasted memory and computation. When a `fork()` is executed
+1. Each of the parent resources are shared with the child
+2. The child and parent share resources as long as no operations have modified the shared resources/values since the fork occured
+3. Once a write operation is to occur on a shared resource, the resource is duplicated so that the parent and child have their **own** copies
+
+This technique delays duplication of pages from the parent's memory address until it is written to. In the case where `exec()` is called immediately after `fork()` none of the resources are duplicated, to reduce wasted computations. This is a considerable optimization that improves quick process execution.
+
+The only incurred overhead by `fork()` is:
+1. The duplication of the parent's page tables (so that the child has a way to map virtual address to physical addresses for the resoures it shares with the parent)
+2. The creation of the unique process descriptor for the child.
+
+
+
+
