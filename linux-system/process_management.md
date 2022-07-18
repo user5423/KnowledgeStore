@@ -130,4 +130,16 @@ Once the process exits the kernel, the process can either resume in `user-space`
 
 The kernel has several well defined interfaces including system calls and exception handlers. A process can only be executed in `kernel-space` if it uses a kernel interface.
 
+### Process Family Tree
 
+In Unix systems, there is a hierarchical structure that all processes adhere to, and linux is no different. When the linux system boots up, the first process that is executed is the `init` process (which has PID 1).
+
+The `init` process is the parent of all Linux processes. If you take a look back at the task descriptors (`struct task_struct`), it has a member called ppid (parent PID). Every task has a parent, and the set of tasks on a systemcan be visualized as a tree (where tasks can have siblings, parents, and children). At the root of the tree is the `init` process, which is the only task to not have a parent process.
+
+The `init` process's job is to initialize the system by triggering additional processes on startup in order to complete the boot process. Historically, `init` would execute `initscripts` that could be found at `etc/inittab` although I believe that this has been phased out for rcS scripts.
+
+**TODO**: Find whether the above paragraph is true!!!
+
+The `init` tasks' process descriptor is statically allocated as `init_task`. This makes sense as the `init` process lives until the OS shuts down. Between bootup and shutdown, the `init` process cannot be killed (and can only be requested to be at shutdown - It is up to the `init` process to shut itself down at this point).
+
+**Hint**: Take a look at Page 30 on "Linux Kernel Development by Robert Love" to see code examples regarding the traversal of processes
