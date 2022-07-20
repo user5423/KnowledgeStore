@@ -174,6 +174,20 @@ The only incurred overhead by `fork()` is:
 1. The duplication of the parent's page tables (so that the child has a way to map virtual address to physical addresses for the resoures it shares with the parent)
 2. The creation of the unique process descriptor for the child.
 
+#### Forking
 
+There are a variety of fork methods that can be used that modify the beha`ior or resources shared between the parent and children. The two main system calls for forking are `fork()` and `vfork()`, which both invoke the `clone()` system call.
 
+The `clone()` system call can take a set of parameters that specify which resources are shared betwen the parent and child, (as well as the behavior of the cloning of the process). The `fork()` and `vfork()` methods don't have any arguments, but call the `clone()` with a set of constant arguments that define their documented behavior (which will be defined shortly)
 
+The `clone()` syscall calls yet another syscall called `do_fork()` which performs the majority of the forking work, and can be found  in `kernel/linux.c`. This function calls`copy_process()`, and then continues execution of the program.
+
+The interesting work is done by the `copy_process()` function:
+1. **Duplicates the parent's task related structures by calling `dup_task_struct()** - A new kernel stack, `thread_info` struct, and task_struct are created for the child process which have identical values to parent. The task descriptors for child and parent at this point are identical
+2. **Checks if child exceeds resource limits** - There are resource limits in place such as process number limits on a per-user basis, that cannot be exceeded
+3. **Clears/Reinitializes members of the child `task_struct`** - A lot of the members of `task_struct` should not be inherited by the child. This includes usage and statistics information.
+4. **Sets the child process's status to `TASK_UNINTERUPTABLE`** - This ensures that no signals interfer with the process causing it to prematurely run
+5. **Updates the flags of the child `task_struct` by calling `copy_flags()`** - Flags such as `PF_SUPERPRIV` (which states if a task has used sudo privileges), and `PF_FORKNOEXEC` (which denotes whether a task has called exec(), are cleared and set respectively
+6. **Allocates a new PID to child by calling `alloc_pid()`**
+7. **Duplicates/Shares resources depending on `clone()` arguments** - Depending on what arguments where passed to clone, resources such as open files, filesystem information, signal handlers, process memory addresses, and namespaces are either shared or duplicated. This is the stage that will semantically different processes and threads.
+8. **Cleanup is performed and a pointer to the child `task_struct` is returned**
