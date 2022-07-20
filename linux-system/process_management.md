@@ -191,3 +191,27 @@ The interesting work is done by the `copy_process()` function:
 6. **Allocates a new PID to child by calling `alloc_pid()`**
 7. **Duplicates/Shares resources depending on `clone()` arguments** - Depending on what arguments where passed to clone, resources such as open files, filesystem information, signal handlers, process memory addresses, and namespaces are either shared or duplicated. This is the stage that will semantically different processes and threads.
 8. **Cleanup is performed and a pointer to the child `task_struct` is returned**
+
+#### vfork()
+
+`vfork()` is another way to create a child process. However, it behaves slightly different from `fork()` in a few ways:
+- When `vfork()` is called, **nothing** is duplicated for the child process. The child is the sole process running in the parent's memory address space. The child has **read-only** access and cannot modify anything in the address space
+- When `vfork()` is called the parent is blocked until the child exits or the child calls `exec()`
+
+Historically, `fork()` was not implemented using Copy-On-Write principles, so there was more cpu and memory wastage. `vfork()` was introduced during this time when `fork()` didn't use CoW. Therefore it was a welcome addition, as it reduced the wastage caused from:
+1. Duplicating parent resources, eventhough a later exec call would allocate and overwrite the `task_struct` entries that pointed to these resources
+2. Duplicating *all* parent resources, eventhough the child and parent will likely share a subset of resources throughout their lifecycle
+
+However, with the implementation of `fork()` using CoW, the only benefits gained from `vfork()` is the memory/cpu saved from copying resource duplicating the parent's page tables. The semantics of `vfork()` can be sometimes tricky.
+
+`vfork()` follows the same workflow of calling `clone()` which in turn calls `do_fork()` like we saw previously for `fork()`. However, this `vfork()` syscall is implemented by passing a special flag to the `clone()` syscall.
+
+Here is some of the behavior of `do_fork()` which diverges from `fork()` for `vfork()`:
+1. During the `copy_process()` the `task_struct.vfork_done` member is set to null
+2. Later on, the `task_struct.vfork_done` is pointed to a specific address (where ?)
+3. After the child starts running, inside of returning a pointer to the child's `task_struct`, the parent is blocked until the child signals it through the `vfork_done` pointer
+4. During the release of memory address ,(which is done when a task exist a memory address space by calling `mm_release()` syscall), the `task_struct.vfork_done` is checked. If `vfork_done` is not NULL then the parent is signalled
+5. Back in `do_fork()` the parent wakes up and returns
+
+Assuming the `vfork()` call was successful, the child is executing in a new address space, and the parent is executing again in its original address space. Although the overhead is lower, the implementation isn't pretty.
+
