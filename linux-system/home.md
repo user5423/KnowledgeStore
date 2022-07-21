@@ -9,8 +9,11 @@ General notes on Linux Kernel:
 	- [Process States](processes/process_states.md)
 	- [Process Context](processes/process_context.md)
 	- [Process Creation](processes/process_creation.md)
-	- [Linux Threads](processes/linux_threads.md)
-	- [Process Cleanup](#)
+	- [Thread Basics](processes/thread_basics.md)
+	- [Kernel Threads](processes/kernel_threads.md)
+	- [Thread Creation](processes/thread_creation.md)
+	- [Process Termination](processes/process_termination.md)
+	- [Process Cleanup](processes/process_cleanup)
 - **Process Scheduling**
 	- [Scheduling Basics](#)
 
