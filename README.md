@@ -19,3 +19,9 @@ Networking
 Security
 
 - ...
+
+Challenges/Labs
+
+- [Leetcode](leetcode/home.md)
+- [HackTheBox](hackthebox/home.md)
+
