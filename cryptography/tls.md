@@ -97,7 +97,7 @@ THe above setps provided a general workflow of how TLS works, section by section
 
 ### TLS 1.2 Handshake
 
-![RFC TLS 1.2 Handshake](tls/tls1.2-handshake.rfc)
+![RFC TLS 1.2 Handshake](tls/TLSv1.2-assets/tls1.2-handshake.rfc)
 
 \* Indicates optional or situation-dependent messages that are not always sent.
 
@@ -120,7 +120,7 @@ The client starts by sending a "Client Hello" message which includes:
 
 The wireshark catpure for the "Client Hello" is as follows:
 
-![Client Hello](tls/tls1.2-client-hello)
+![Client Hello](tls/TLSv1.2-assets/tls1.2-client-hello)
 
 
 Taking a look at the `Handshake Protocol: Client Hello`, you will see the data that I previously mentioned that the client would send.
@@ -128,12 +128,12 @@ Taking a look at the `Handshake Protocol: Client Hello`, you will see the data t
 **The TLS Version***
 Here the version is specified as TLSv1.2:
 
-![Client TLS Version](tls/tls1.2-client-hello.version)
+![Client TLS Version](tls/TLSv1.2-assets/tls1.2-client-hello.version)
 
 **List of Supported Ciphersuites**
 Here is the list of supported ciphersuites (in order of preference). There are a quite a few options here for the different types of algorithms.
 
-![Client Supported Ciphersuites](tls/tls1.2-client-hello.cipher-suites)
+![Client Supported Ciphersuites](tls/TLSv1.2-assets/tls1.2-client-hello.cipher-suites)
 
 
 **Client Random**
@@ -141,14 +141,14 @@ I did mention that the client random is 28-bytes. Technically, it is 32-bytes wi
 
 The Client and Server Random deter replay attacks, which will be explained later.
 
-![Client Random](tls/tls1.2-client-hello.random)
+![Client Random](tls/TLSv1.2-assets/tls1.2-client-hello.random)
 
 
 **Extensions**
 
 There are quite a few extensions present. "Extensions" are way for TLS clients and servers to communicate additional information while still being compatible with previous versions of TLS. These "Extension" fields are ignored by older TLS versions, but clients/servers with newer TLS versions will processes these.
 
-![Client Extensions](tls/tls1.2-client-hello.extensions)
+![Client Extensions](tls/TLSv1.2-assets/tls1.2-client-hello.extensions)
 
 Some of these extensions specify additional TLS parameters or algorithms:
 - `extended_then_mac`
@@ -187,7 +187,7 @@ The Server then sends this "Server Hello" message
 ##### Wireshark Catpure
 The wireshark capture for this is a bit longer than the "Client Hello":
 
-![Server Hello](tls/tls1.2-server-hello)
+![Server Hello](tls/TLSv1.2-assets/tls1.2-server-hello)
 
 There are four different messages sent here
 - Server Hello
@@ -197,7 +197,7 @@ There are four different messages sent here
 
 ###### 2.1 Server Hello
 
-![Server Hello](tls/tls1.2-server-hello.hello)
+![Server Hello](tls/TLSv1.2-assets/tls1.2-server-hello.hello)
 
 The important fields that this Server Hello sends are:
 - Server Random
@@ -211,7 +211,7 @@ There are a few new extensions here including that you don't need to worry about
 
 ###### 2.2 Certificate
 
-![Server Hello Certificates](tls/tls1.2-server-hello.certificates)
+![Server Hello Certificates](tls/TLSv1.2-assets/tls1.2-server-hello.certificates)
 
 In this message, a list of certificates are sent that the client will use to validate the authenticity of the server. The certificates are sent in the order:
 - [end-entity certificate, intermediary CA certificate, ..., root CA certificate]
@@ -231,7 +231,7 @@ Although, I'd love to breakdown the certificates, I'll leave that for a knowledg
 
 ###### 2.3 Server Key Exchange
 
-![Server Key Exchange](tls/tls1.2-server-hello.server-key-exchange)
+![Server Key Exchange](tls/TLSv1.2-assets/tls1.2-server-hello.server-key-exchange)
 
 This contains the parameters of the Key Exchange. In this case, the selection algorithm is EDHCE and we have the parameters listed for it including:
 - curve type
@@ -251,14 +251,14 @@ Aswell as the signature of this parameter list (to ensure integrity):
 
 This acts as a delimiter to tell the client that there are no more Server messages to be sent for now. This can be seen by the lack of fields or valuable:
 
-![Server Hello Done](tls/tls1.2-server-hello.done)
+![Server Hello Done](tls/TLSv1.2-assets/tls1.2-server-hello.done)
 
 
 
 
 ##### 3 Client Key Exchange
 
-![Client Key Exchange](tls/tls1.2-client-key-exchange)
+![Client Key Exchange](tls/TLSv1.2-assets/tls1.2-client-key-exchange)
 
 The Client then performs:
 - Verifies the server's identity with the server certificate
@@ -283,21 +283,21 @@ The Client then performs:
 
 ###### 3.1 Client Key Exchange
 
-![Client Key Exchange](tls/tls1.2-client-key-exchange.client-key-exchange)
+![Client Key Exchange](tls/TLSv1.2-assets/tls1.2-client-key-exchange.client-key-exchange)
 
 Here the pre-master key is encrypted using the server's private key. This is seen in the filed `Pubkey`
 
 
 ###### 3.2 Change Cipher Spec
 
-![Client Change Cipher Spec](tls/tls1.2-client-change-cipher-spec)
+![Client Change Cipher Spec](tls/TLSv1.2-assets/tls1.2-client-change-cipher-spec)
 
 This message states that the Client will now send all future messages using the bulk encryption method and key that was previously negotiated and generated.
 
 
 ###### 3.3 Encrypted Handshake Message
 
-![Client Change Cipher Spec](tls/tls1.2-client-encrypted-handshake)
+![Client Change Cipher Spec](tls/TLSv1.2-assets/tls1.2-client-encrypted-handshake)
 
 A value is generated by hashing of all the previously exchanged messages. This value is then encrypted using the previously generated bulk encryption key, and then sent to the server.
 
@@ -305,20 +305,20 @@ A value is generated by hashing of all the previously exchanged messages. This v
 
 ##### 4 Server Acknowledgement
 
-![Server Acknowledgment](tls/tls1.2-server-acknowledgement)
+![Server Acknowledgment](tls/TLSv1.2-assets/tls1.2-server-acknowledgement)
 
 "Server Acknolwedgement" is not a term official to the RFC, however, I think it describes well what happens. The Server will receive the previous messages in Step 3 and the TLS Server will update it's state accordingly (in the handshake)
 
 ###### 4.1 Change Cipher Spec
 
-![Server Change Cipher Spec](tls/tls1.2-server-change-cipher-spec)
+![Server Change Cipher Spec](tls/TLSv1.2-assets/tls1.2-server-change-cipher-spec)
 
 This message states that the Server will now send all future messages using the bulk encryption method and key that was previously negotiated and generated. The record layer now changes its state to use symmetric key encryption
 
 
 ###### 4.2 Encrypted Handshake Message
 
-![Server Encrypted Handshake Message](tls/tls1.2-server-encrypted-handshake-message)
+![Server Encrypted Handshake Message](tls/TLSv1.2-assets/tls1.2-server-encrypted-handshake-message)
 
 Just like the Client, the Server generates a hash of the previously exchanged message and encrypts it. The Server then sends this message to the Client. Once the client has decrypted this message and verified it, the Handshake is complete.
 
