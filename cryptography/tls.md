@@ -94,3 +94,73 @@ What is done next is for the Client and Server is dependent on the Key Exchange 
 THe above setps provided a general workflow of how TLS works, section by section. However, in reality, these steps are interleaved and some messages are combined together in order to reduce the number of trips over the network to speed up the handshake. Taking a look at the TLSv1.2 and TLSv1.3 walkthroughs will better help you understand how the handshakes are structured.
 
 
+
+### TLS 1.2 Handshake
+
+![RFC TLS 1.2 Handshake](tls/tls1.2-handshake.rfc)
+
+\* Indicates optional or situation-dependent messages that are not always sent.
+
+**NOTE**: To help avoid pipeline stalls, ChangeCipherSpec is anindependent TLS protocol content type, and is not actually a TLS handshake message.
+
+**NOTE**: A Good concise resource - https://cabulous.medium.com/tls-1-2-andtls-1-3-handshake-walkthrough-4cfd0a798164. The message flow for a full handshake from the RFC is as follows:
+
+
+
+
+#### 1. Client Hello
+
+The client starts by sending a "Client Hello" message which includes:
+- The TLS version
+- The list of supported cipher suites
+- A 28-byte random number called "Client-Random"
+
+
+##### Wireshark Catpure
+
+The wireshark catpure for the "Client Hello" is as follows:
+
+![Client Hello](tls/tls1.2-client-hello)
+
+
+Taking a look at the `Handshake Protocol: Client Hello`, you will see the data that I previously mentioned that the client would send.
+
+**The TLS Version***
+Here the version is specified as TLSv1.2:
+
+![Client TLS Version](tls/tls1.2-client-hello.version)
+
+**List of Supported Ciphersuites**
+Here is the list of supported ciphersuites (in order of preference). There are a quite a few options here for the different types of algorithms.
+
+![Client Supported Ciphersuites](tls/tls1.2-client-hello.cipher-suites)
+
+
+**Client Random**
+I did mention that the client random is 28-bytes. Technically, it is 32-bytes with the first 4 bytes encoding the current timestamp, and the remaining 28 bytes being random.
+
+The Client and Server Random deter replay attacks, which will be explained later.
+
+![Client Random](tls/tls1.2-client-hello.random)
+
+
+**Extensions**
+
+There are quite a few extensions present. "Extensions" are way for TLS clients and servers to communicate additional information while still being compatible with previous versions of TLS. These "Extension" fields are ignored by older TLS versions, but clients/servers with newer TLS versions will processes these.
+
+![Client Extensions](tls/tls1.2-client-hello.extensions)
+
+Some of these extensions specify additional TLS parameters or algorithms:
+- `extended_then_mac`
+- `signature_algorithms`
+
+Some of these are parameters for specific cryptographic algorithms
+- `ec_point_formats`
+- `supported_groups`
+
+And some of these just help with routing
+- `server_name` (provides a host name in case multiple hosts on a single IP)
+
+If the Extension is standard, you should be able to read about it in the TLS RFC:
+- https://www.rfc-editor.org/rfc/rfc5246
+
