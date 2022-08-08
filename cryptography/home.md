@@ -1,14 +1,14 @@
 ### Cryptography
 
-This contains notes regarding the Linux OS and Kernel
+This contains notes regarding Cryptography
 
-General notes on Linux Kernel:
+General notes on:
 - **TLS**
 	- [TLS Basics](TLS.md)
 	- [TLSv1.2](TLSv1.2.md)
 	- [TLSv1.3](TLSv1.3.md)
 	- [TLS Attacks](TLS-attacks.md)
-	- [SSL Strip](TLS-sslstrip.md)
+	- [SSL Strips](TLS-sslstrip.md)
 
 
 
