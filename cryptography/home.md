@@ -9,6 +9,7 @@ General notes on:
 	- [TLSv1.3](TLSv1.3.md)
 	- [TLS Attacks](TLS-attacks.md)
 	- [SSL Strips](TLS-sslstrip.md)
+	- [Heartbleed](TLS-heartbleed.md)
 
 
 
