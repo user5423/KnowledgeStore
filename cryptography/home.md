@@ -3,10 +3,12 @@
 This contains notes regarding the Linux OS and Kernel
 
 General notes on Linux Kernel:
-- **Cryptography**
+- **TLS**
 	- [TLS Basics](TLS.md)
 	- [TLSv1.2](TLSv1.2.md)
 	- [TLSv1.3](TLSv1.3.md)
+	- [TLS Attacks](TLS-attacks.md)
+	- [SSL Strip](TLS-sslstrip.md)
 
 
 
