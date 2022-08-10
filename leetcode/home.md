@@ -18,3 +18,4 @@ Problems Solved
 - [Triangle](src/triangle.md) (Medium)
 - [My Calendar I](src/my_calendar_1.md) (Medium)
 - [Word Break](src/word_break.md) (Medium)
+- [Spiral Matrix](src/spiral_matrix.md) (Medium)
