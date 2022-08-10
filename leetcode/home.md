@@ -17,3 +17,4 @@ Problems Solved
 - [Best time to buy and sell stock](src/best_time_to_buy_and_sell_stock.md) (Easy)
 - [Triangle](src/triangle.md) (Medium)
 - [My Calendar I](src/my_calendar_1.md) (Medium)
+- [Word Break](src/word_break.md) (Medium)
