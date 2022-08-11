@@ -21,3 +21,4 @@ Problems Solved
 - [Spiral Matrix](src/spiral_matrix.md) (Medium)
 - [Longest Consecutive Sequence](src/longest_consecutive_sequence.md) (Medium)
 - [House Robber](src/house_robber.md) (Medium)
+- [House Robber 2](src/house_robber_2.md) (Medium)
