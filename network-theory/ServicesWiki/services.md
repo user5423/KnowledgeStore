@@ -16,7 +16,7 @@ Here are a list of protocols with Knowledge Stores on them. These have been writ
 | Post Office Protocol v3 (POP3)                                                                                    | TCP port 110 |
 | Instant Message Access Protocol (IMAP4)                                                                           | TCP port 143 |
 | Remote Desktop Protocol (RDP)                                                                                     | TCP port 3389 or UDP port 3389 |
-| Transport Layer Security (TLS/SSL)                                                                                | TCP port 995/465 |
+| [Transport Layer Security (TLS/SSL)](/cryptography/TLS.md)                                                        | TCP port 995/465 |
 | [Simple Network Management Protocol (SNMP)](snmp.md)                                                              | UDP port 161 |
 | TErminal over NETwork aka. (TELNET)                                                                               | TCP port 23 |
 | Secure Shell (SSH)                                                                                                | TCP port 22 |
@@ -24,7 +24,7 @@ Here are a list of protocols with Knowledge Stores on them. These have been writ
 | Hypertext Transfer Protocol Secure (HTTPS)                                                                        | TCP port 443 |
 | Network Time Protocol (NTP)                                                                                       | UDP port 123 |
 | Lightweight Directory Access Protocol (LDAP)                                                                      | TCP port 389 |
-| Network Basic Input/Output System (NetBIOS)                                                                       | TCP and UDP 137-139 |
+| [Network Basic Input/Output System (NetBIOS)](netbios.md)                                                         | TCP and UDP 137-139 |
 | Server Message Block (SMB)                                                                                        | TCP port 445, (different versions run on different ports) |
 | Domain Name Server (DNS)                                                                                          | UDP port 53, (can also run TCP on the same port) |
 | Dynamic Host Configuration Protocol (DHCP)                                                                        | UDP port 67/68 |
