@@ -24,7 +24,7 @@ Here are a list of protocols with Knowledge Stores on them. These have been writ
 | Hypertext Transfer Protocol Secure (HTTPS)                                                                        | TCP port 443 |
 | Network Time Protocol (NTP)                                                                                       | UDP port 123 |
 | Lightweight Directory Access Protocol (LDAP)                                                                      | TCP port 389 |
-| Network Basic Input/Output System (NetBIOS)                                                                       | TCP and UDP 137-139 |
+| [Network Basic Input/Output System (NetBIOS)](netbios.md)                                                         | TCP and UDP 137-139 |
 | Server Message Block (SMB)                                                                                        | TCP port 445, (different versions run on different ports) |
 | Domain Name Server (DNS)                                                                                          | UDP port 53, (can also run TCP on the same port) |
 | Dynamic Host Configuration Protocol (DHCP)                                                                        | UDP port 67/68 |
