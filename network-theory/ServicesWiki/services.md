@@ -17,7 +17,7 @@ Here are a list of protocols with Knowledge Stores on them. These have been writ
 | Instant Message Access Protocol (IMAP4)                                                                           | TCP port 143 |
 | Remote Desktop Protocol (RDP)                                                                                     | TCP port 3389 or UDP port 3389 |
 | Transport Layer Security (TLS/SSL)                                                                                | TCP port 995/465 |
-| Simple Network Management Protocol (SNMP)                                                                         | UDP port 161 |
+| [Simple Network Management Protocol (SNMP)](snmp.md)                                                              | UDP port 161 |
 | TErminal over NETwork aka. (TELNET)                                                                               | TCP port 23 |
 | Secure Shell (SSH)                                                                                                | TCP port 22 |
 | Hypertext Transfer Protocol (HTTP)                                                                                | TCP port 80 |
