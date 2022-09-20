@@ -78,3 +78,34 @@ Every client command is prefixed with an uniquely generated identifier that is c
 
 Tag definition has been changed from IMAP4rev1 to IMAP4rev2 - the client "SHOULD" generate a unique tag for every command, but a Server must accept tag reuse. **NOTE:** I'm not sure what new functionality has caused relaxation on the uniqueness of the tag for commands.
 
+##### Command Responses
+
+...
+
+##### Incomplete Commands
+
+There are two scenarios where a line (ie. string delimited by CRLF) that was sent to the server is NOT a command:
+1. The command argument is quoted with an octect count (TODO: example??)
+2. The command arguments require feedback before the rest of the command can be executed (which will be performed using data from a future line). An example of this is the `AUTHENTICATE` command.
+
+In either scenario, the server will respond to a client with a "command continuation request" asking the client to continue with the incomplete command. This response from the server is prefixed with the token: `+`
+
+However, if the server detects an error with the client, then it sends a tagged "BAD complete response" where the response tag corresponds to the request tag.
+
+
+TODO: Examples of 1 and 2 (incomplete commands)
+
+
+###### What about concurrency?
+
+The above is all fine, but the IMAP protocol allows for concurrent processing of requests. While performing a incomplete command, it is possible that the client receives a response for a **different** in-progress command.
+
+RFC 3501 states *"In all cases, the client MUST send a complete command (including receiving all command continuation request responses and command continuations for the command) before initiating a new command."*
+
+This provides a few properties
+
+1. There is no ambiguity in what the server receives
+- The Server Protocol Receiver processes command requests sequentially. This is important for commands that require multiple interactions as the client CANNOT send a different request during the multistep command, so there is no ambiguity. If the server doesn't receive the expected
+2. There is some ambiguity in responses that start with the token `*`. The server may send responses that are not 1) command continuation requests or 2) complete command responses, and it is possible for intermediate responses (i.e. those that start with `*`) to be interleaved. (I haven't seen anything in RFC 3501 that suggests otherwise). This doesn't seem like a big issue anyways. I believe that the Client Protocol Receivers in this case should be focusing on "command completion" responses as this is the final state of the request. These response are always tagged so there's no ambiguity in which request the reply corresponds to)
+
+
