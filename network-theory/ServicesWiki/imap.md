@@ -74,13 +74,17 @@ It is a syntax error to send commands with
 This doesn't really require an explanation. In order to perform an operation, you need to use the corresponding command and arguments in your IMAP request to perform it.
 
 **TAG**
-Every client command is prefixed with an uniquely generated identifier that is called a **tag**, (which is an alphanumeric string such as `A001`). The IMAP protocol permits several concurrent commands to be sent from the client to the server on the **same** connection. There is no guarantee that the commands are responded to in the same sequence in which they were sent to the IMAP server. Since order cannot be guaranteed, one way the client is able to determine which command a response corresponds with is by using the **tag** identifier to match them up. 
+Every client command is prefixed with an uniquely generated identifier that is called a **tag**, (which is an alphanumeric string such as `A001`). The IMAP protocol permits several concurrent commands to be sent from the client to the server on the **same** connection. There is no guarantee that the commands are responded to in the same sequence in which they were sent to the IMAP server. Since order cannot be guaranteed, one way the ctolient is able to determine which command a response corresponds with is by using the **tag** identifier to match them up. 
 
 Tag definition has been changed from IMAP4rev1 to IMAP4rev2 - the client "SHOULD" generate a unique tag for every command, but a Server must accept tag reuse. **NOTE:** I'm not sure what new functionality has caused relaxation on the uniqueness of the tag for commands.
 
-##### Command Responses
+##### Status Responses
 
-...
+There are two types of responses that the Server Protocol Receiver can respond to the above "complete command" (unofficial term)
+1. The Server protocol receiver can optionally reply to a command with several lines that provide debugging information about the request it is currently being processed. These messages (lines) are prefixed with the token `*`, and are untagged. A command request doesn't need to be responded with these lines
+2. The Server protocol receiver will then finally send a "complete command response" that is tagged (with the corresponding request) and indicates the **completion** of the command. The format is structured but can change depending on the command and response
+
+TODO: Expand on this using chapter 7 page 63 RFC 3501
 
 ##### Incomplete Commands
 
