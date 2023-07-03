@@ -38,3 +38,4 @@ Problems Solved
 - [Populating Next Right Pointers in Each Node II](src/populating_next_right_pointers_in_each_node_2.md) (Medium)
 - [Fair Distribution of Cookies](src/fair_distribution_of_cookies.md) (Medium)
 - [Maximum Number of Achievable Transfer Requests](src/maximum_number_of_achievable_transfer_requests.md) (Hard)
+- [Search In Rotated Sorted Array](src/search_in_rotated_sorted_array.md)
