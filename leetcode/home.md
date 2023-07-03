@@ -36,3 +36,4 @@ Problems Solved
 - [Maximum Depth of Nary Tree](src/maximum_depth_of_nary_tree.md) (Easy)
 - [Populating Next Right Pointers in Each Node](src/populating_next_right_pointers_in_each_node.md) (Medium)
 - [Populating Next Right Pointers in Each Node II](src/populating_next_right_pointers_in_each_node_2.md) (Medium)
+- [Fair Distribution of Cookies](src/fair_distribution_of_cookies.md) (Medium)
