@@ -40,3 +40,4 @@ Problems Solved
 - [Maximum Number of Achievable Transfer Requests](src/maximum_number_of_achievable_transfer_requests.md) (Hard)
 - [Search In Rotated Sorted Array](src/search_in_rotated_sorted_array.md) (Medium)
 - [Substring With Largest Variance](src/substring_with_largest_variance.md) (Hard)
+- [Maximum Consecutive Floors without Special Floors](src/maximum_consecutive_floors_without_special_floors.md) (Medium)
